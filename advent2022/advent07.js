@@ -3,44 +3,75 @@ const {data, dataTest} = require('./advent07Data')
 const parsedData = dataTest.split('\n')
 
 let state = "";
-let currentFolder = ""
-parsedData.reduce((folders, command) => {
+let currentFolderStructure = []
+
+let currentFolder = "/"
+
+const folderStructure = {}
+
+function updatePath(original, path, value) {
+    const last = path.pop();
+    console.log({last})
+    let ref = path.reduce((acc, key) => acc[key] || {}, original)
+
+    ref[last] = {...ref[last], ...value};
+    return original
+}
+
+
+const result = parsedData.reduce((folders, command) => {
     const parsed = command.split(' ')
     if (parsed[1] === 'cd') {
+        // console.log('cd')
         state = 'changeFolder'
+        if (parsed[2] === '..') {
+            currentFolderStructure.pop()
+            console.log("poop?", parsed)
+        } else {
+            // let snadReference = currentFolderStructure.reduce((carry, item) => {
+            //     console.log({carry, item})
+            //     carry = carry[item]
+            //     return carry
+            // }, folderStructure)
 
+
+            // folderStructure[currentFolder][parsed[2]] = {}
+            currentFolder = parsed[2]
+
+            if (currentFolder !== '/') {
+                console.log({
+                    currentFolder,
+                    folderStructure,
+                    currentFolderStructure
+                })
+                updatePath(folderStructure, [...currentFolderStructure], {[currentFolder]: {}})
+                console.log(folderStructure)
+            }
+            // snadReference = {...snadReference, [currentFolder]: {}}
+            currentFolderStructure.push(currentFolder)
+
+            folders[currentFolder] = 0
+        }
     } else if (parsed[1] === 'ls') {
+        // console.log('ls')
         state = 'dirList'
-        return folders
+
+    } else if (parsed[0] !== 'dir') {
+        // console.log('item')
+
+        // console.log(folders, parsed)
+        folders[currentFolder] += parseInt(parsed[0], 10)
+    } else {
+        // console.log("dir", currentFolder,
+        //     parsed[1])
+        // folderStructure[currentFolder][parsed[1]] = {}
     }
+    return folders
 
+}, {"/": 0})
 
-}, [])
-// console.log("first: ", sum1)
+console.log({folderStructure, currentFolderStructure})
+console.log("first: ", JSON.stringify({result, folderStructure}, null, 2))
 
 // console.log("second:", sum2)
 
-
-// cd /
-// $ ls
-// dir a
-// 14848514 b.txt
-// 8504156 c.dat
-// dir d
-// $ cd a
-// $ ls
-// dir e
-// 29116 f
-// 2557 g
-// 62596 h.lst
-// $ cd e
-// $ ls
-// 584 i
-// $ cd ..
-// $ cd ..
-// $ cd d
-// $ ls
-// 4060174 j
-// 8033020 d.log
-// 5626152 d.ext
-// 7214296 k
