@@ -73,5 +73,14 @@ const result = parsedData.reduce((folders, command) => {
 console.log({folderStructure, currentFolderStructure})
 console.log("first: ", JSON.stringify({result, folderStructure}, null, 2))
 
+const compute = (result, folderStructure) => {
+    const keys = Object.keys(folderStructure)
+    keys.forEach(key => {
+        folderStructure[key] = fuuuuuu
+    })
+}
+
+console.log(compute(result, folderStructure))
+
 // console.log("second:", sum2)
 
