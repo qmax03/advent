@@ -1,12 +1,6 @@
-// noinspection DuplicatedCode
-
 const {data, dataTest} = require('./advent08Data')
 
-
 const parsedData = data.split('\n').map(row => row.split(''))
-
-// console.log(parsedData)
-const outside = parsedData.length * 2 + (parsedData[0].length - 2) * 2
 
 const sum1 = parsedData.reduce((sum, row, rowIndex) => {
     row.forEach((tree, treeIndex) => {
