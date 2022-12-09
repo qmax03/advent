@@ -83,10 +83,21 @@ const baseObject = {
     t2: {x: 0, y: 0},
     t1: {x: 0, y: 0},
     h: {x: 0, y: 0},
-
 }
 
-
+// const baseObject = {
+//     t9: {x: 0, y: 0},
+//     t8: {x: 0, y: 0},
+//     t7: {x: 0, y: 0},
+//     t6: {x: 0, y: 0},
+//     t5: {x: 0, y: 0},
+//     t4: {x: 0, y: 0},
+//     t3: {x: 1, y: 0},
+//     t2: {x: 2, y: 0},
+//     t1: {x: 3, y: 0},
+//     h: {x: 4, y: 0},
+//
+// }
 const set2 = new Set()
 
 const calculateNextChagePosition = (currentObject, previousObject, direction, key) => {
@@ -96,45 +107,69 @@ const calculateNextChagePosition = (currentObject, previousObject, direction, ke
     switch (direction) {
         case 'R':
             if (isDistanceGreat(previousObject, currentObject)) {
-                currentObject.y = previousObject.y
+                if (!sameYPosition) {
+                    currentObject.y++;
+                }
+                if (!sameXPosition && currentObject.x < previousObject.x && Math.abs(currentObject.x - previousObject.x) > 0) {
+                    currentObject.x++;
+                }
             }
-            if (!sameXPosition && currentObject.x < previousObject.x && Math.abs(currentObject.x - previousObject.x) > 1) {
-                currentObject.x++;
-            }
+
+            // if (isDistanceGreat(previousObject, currentObject)) {
+            //     currentObject.y = previousObject.y
+            // }
+            // if (!sameXPosition && currentObject.x < previousObject.x && Math.abs(currentObject.x - previousObject.x) > 1) {
+            //     currentObject.x++;
+            // }
 
             break
         case 'L':
-            if (isDistanceGreat(previousObject, currentObject)) {
-                currentObject.y = previousObject.y
-            }
-            if (!sameXPosition && currentObject.x > previousObject.x && Math.abs(currentObject.x - previousObject.x) > 1) {
-                currentObject.x--;
-            }
-            break
-        case 'U':
-             up se chova jako right poro dalsi elementy...
+
             if (isDistanceGreat(previousObject, currentObject)) {
                 console.log("great distance",
                     currentObject,
                     previousObject, key)
-                currentObject.x = previousObject.x
+                if (!sameYPosition && currentObject.y > previousObject.y) {
+                    console.log("y--")
+                    currentObject.y--;
+                }
+                if (!sameXPosition && currentObject.x > previousObject.x && Math.abs(currentObject.x - previousObject.x) > 0) {
+                    currentObject.x--;
+                }
             }
-            console.log({
-                currentObject,
-                previousObject, key
-            }, Math.abs(currentObject.y - previousObject.y))
-            if (!sameYPosition && currentObject.y < previousObject.y && Math.abs(currentObject.y - previousObject.y) > 1) {
-                console.log("+y", key)
-                currentObject.y++;
-            }
+            // if (isDistanceGreat(previousObject, currentObject)) {
+            //     currentObject.y = previousObject.y
+            // }
+            // if (!sameXPosition && currentObject.x > previousObject.x && Math.abs(currentObject.x - previousObject.x) > 1) {
+            //     currentObject.x--;
+            // }
+            break
+        case 'U':
+            // up se chova jako right poro dalsi elementy...
+            if (isDistanceGreat(previousObject, currentObject)) {
 
+                // console.log("great distance",
+                //     currentObject,
+                //     previousObject, key)
+                if (!sameXPosition) {
+                    currentObject.x++;
+                }
+                if (!sameYPosition && currentObject.y < previousObject.y && Math.abs(currentObject.y - previousObject.y) > 0) {
+                    // console.log("+y", key)
+                    currentObject.y++;
+                } else {
+                    // console.log("same y", !sameYPosition && currentObject.y < previousObject.y && Math.abs(currentObject.y - previousObject.y) > 1, !sameYPosition, currentObject.y < previousObject.y, Math.abs(currentObject.y - previousObject.y) > 1)
+                }
+            }
             break
         case 'D':
             if (isDistanceGreat(previousObject, currentObject)) {
-                currentObject.x = previousObject.x
-            }
-            if (!sameYPosition && currentObject.y > previousObject.y && Math.abs(currentObject.y - previousObject.y) > 1) {
-                currentObject.y--;
+                if (!sameXPosition) {
+                    currentObject.x--;
+                }
+                if (!sameYPosition && currentObject.y < previousObject.y && Math.abs(currentObject.y - previousObject.y) > 0) {
+                    currentObject.y--;
+                }
             }
             break
     }
@@ -159,26 +194,27 @@ const changePosition = (currentObject, direction) => {
 }
 
 const keys = Object.keys(baseObject).reverse()
-console.log({keys})
+
 const sum2 = parsedData.reduce((position, {direction, steps}) => {
     for (let i = 0; i < steps; i++) {
 
         changePosition(position.h, direction)
         keys.forEach((key, index) => {
-            console.log("baseValues", key, position[keys[index - 1]], position[key])
+            // console.log("baseValues", key, position[key], position[keys[index - 1]])
             if (keys[index - 1] && key !== 'h') {
-                console.log({
-                    nch: calculateNextChagePosition(position[key], position[keys[index - 1]], direction, key),
-                    key
-                })
+                // console.log({
+                //     nch: calculateNextChagePosition(position[key], position[keys[index - 1]], direction, key),
+                //     p1: position[key].key
+                // })
+                calculateNextChagePosition(position[key], position[keys[index - 1]], direction, key)
                 // console.log({position, command: {direction, steps}, key, keymi1: keys[index - 1]})
 
                 set2.add(`${position[key].x}-${position[key].y}`)
             }
         })
-        console.log({position, command: {direction, steps}})
 
     }
+    console.log({position, command: {direction, steps}})
 
     return position
 }, baseObject)

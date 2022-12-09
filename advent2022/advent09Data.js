@@ -1,14 +1,13 @@
-// const dataTest = `R 4
-// U 4
-// L 3
-// D 1
-// R 4
-// D 1
-// L 5
-// R 2`
-
 const dataTest = `R 4
-U 4`
+U 4
+L 3
+D 1
+R 4
+D 1
+L 5
+R 2`
+
+// const dataTest = `U 4`
 const data = `U 2
 L 1
 U 1
