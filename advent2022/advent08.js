@@ -29,6 +29,7 @@ const sum1 = parsedData.reduce((sum, row, rowIndex) => {
                     if (parsedData[i][treeIndex] >= tree && i !== rowIndex) {
                         foundHigher = true
                     }
+
                     if (i === rowIndex && !foundHigher) {
                         break
                     } else if (i === rowIndex) {
